@@ -5,10 +5,8 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import java.lang.Error
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,5 +48,8 @@ class MainActivity : AppCompatActivity() {
         tabLayout.getTabAt(0)?.text = "Info";
         tabLayout.getTabAt(1)?.setIcon(R.drawable.ic_other);
         tabLayout.getTabAt(1)?.text = "Other";
+
     }
+
+
 }

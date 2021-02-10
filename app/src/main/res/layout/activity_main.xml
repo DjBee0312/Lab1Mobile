@@ -12,7 +12,10 @@
         android:layout_height="match_parent"
         app:layout_constraintBottom_toTopOf="@+id/id_tabLayout"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-16dp" />
+        tools:layout_editor_absoluteY="-16dp" >
+
+    </androidx.viewpager2.widget.ViewPager2>
+
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/id_tabLayout"
