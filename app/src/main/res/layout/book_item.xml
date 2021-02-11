@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/id_image"
+        android:layout_width="120dp"
+        android:src="@drawable/ic_books"
+        android:layout_height="120dp" />
+
+    <TextView
+        android:layout_toRightOf="@+id/id_image"
+        android:id="@+id/id_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        android:text="SUPER LONG TITLE TO TEST HOW IT IS LOOKS When the name is toooooo long" />
+    <TextView
+        android:layout_toRightOf="@+id/id_image"
+        android:layout_below="@id/id_title"
+        android:id="@+id/id_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Some Descr"
+        android:textStyle="italic"
+        android:textColor="@color/black"
+        android:textSize="16dp"/>
+    <TextView
+        android:layout_toRightOf="@+id/id_image"
+        android:layout_below="@id/id_subtitle"
+        android:id="@+id/id_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="$22.30"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="20dp"/>
+
+</RelativeLayout>
+</RelativeLayout>

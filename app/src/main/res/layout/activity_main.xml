@@ -20,7 +20,7 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/id_tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -36,6 +36,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Other" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/id_books"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Books" />
 
     </com.google.android.material.tabs.TabLayout>
 

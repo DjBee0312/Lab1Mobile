@@ -18,11 +18,12 @@ class MainActivity : AppCompatActivity() {
         var viewPager2 : ViewPager2 = findViewById(R.id.id_viewPager2);
 
         viewPager2.adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount(): Int = 2;
+            override fun getItemCount(): Int = 3
             override fun createFragment(position: Int): Fragment {
                 return when(position){
                     0 -> Page1();
                     1 -> Page2();
+                    2 -> BookActivity();
                     else -> error("Error");
                 }
             }
@@ -40,6 +41,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        tabLayout.getTabAt(2)?.apply {
+            customView?.setOnClickListener(){
+                viewPager2.setCurrentItem(2)
+            }
+        }
         TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
             viewPager2.setCurrentItem(tab.position, true)
         }.attach()
@@ -48,8 +54,7 @@ class MainActivity : AppCompatActivity() {
         tabLayout.getTabAt(0)?.text = "Info";
         tabLayout.getTabAt(1)?.setIcon(R.drawable.ic_other);
         tabLayout.getTabAt(1)?.text = "Other";
-
+        tabLayout.getTabAt(2)?.setIcon(R.drawable.ic_books);
+        tabLayout.getTabAt(2)?.text = "Books";
     }
-
-
 }
