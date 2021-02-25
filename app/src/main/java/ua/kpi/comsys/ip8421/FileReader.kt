@@ -1,24 +1,44 @@
 package ua.kpi.comsys.ip8421
 
-import android.content.Context
-import com.beust.klaxon.Klaxon
-import java.io.InputStream
+import com.google.gson.GsonBuilder
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class BookList(val books: MutableList<Book>)
 
-fun readBooks(ctx: Context, fileName : String): MutableList<Book> {
+const val url = "https://api.itbook.store/1.0/"
 
-    val inputStream: InputStream = ctx.assets.open(fileName)
-    val jsonBooks = inputStream.bufferedReader().use { it.readText() }
-    val books = Klaxon().parse<BookList>(jsonBooks)
-    return books?.books ?: mutableListOf(Book("", "", "", "", ""))
+suspend fun readBooks( REQUEST: String): MutableList<Book> {
 
+    val retrofitServicesBookList: RetrofitServicesBookList = Retrofit.Builder()
+        .baseUrl(url)
+        .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+        .build().create(RetrofitServicesBookList::class.java)
+
+    val bookListRequest = retrofitServicesBookList.getBookList(REQUEST)
+    return bookListRequest.books
 }
 
-fun readBook(ctx: Context, fileName : String): Book? {
-    if(fileName == "BooksInfo/noid.txt") return null
-    print(fileName)
-    val inputStream: InputStream = ctx.assets.open(fileName)
-    val jsonBook = inputStream.bufferedReader().use { it.readText() }
-    return Klaxon().parse<Book>(jsonBook)
+suspend fun readBook(isbn: String): Book? {
+
+    val retrofitServicesBook: RetrofitServicesBook = Retrofit.Builder()
+        .baseUrl(url)
+        .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+        .build().create(RetrofitServicesBook::class.java)
+
+    val bookRequest = retrofitServicesBook.getBook(isbn)
+    if(isbn == "noid") return null
+    return bookRequest
+}
+
+suspend fun readImages(REQUEST : String, COUNT : String) : MutableList<Image> {
+    val urlPic = "https://pixabay.com/api/"
+
+    val retrofitImages: RetrofitImages = Retrofit.Builder()
+        .baseUrl(urlPic)
+        .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+        .build().create(RetrofitImages::class.java)
+
+    val imageRequest = retrofitImages.getImages()// REQUEST COUNT
+    return imageRequest.hits
 }

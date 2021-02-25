@@ -1,18 +1,37 @@
 package ua.kpi.comsys.ip8421
 
-import android.graphics.drawable.Drawable
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import java.io.InputStream
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class BookInfo : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.book_info)
-        val fileName = "BooksInfo/" + intent.getStringExtra("isbn13").toString() + ".txt"
-        val bookInfo = readBook(this, fileName)?: return
+        findViewById<ProgressBar>(R.id.progressBar2).visibility = View.VISIBLE
+        val isbn = intent.getStringExtra("isbn13").toString()
+        GlobalScope.launch {
+            val bookInfo = readBook(isbn)?: return@launch
+            withContext(Dispatchers.Main){
+                createInfo(bookInfo)
+                findViewById<ProgressBar>(R.id.progressBar2).visibility = View.INVISIBLE
+                findViewById<ScrollView>(R.id.id_scrollView).visibility = View.VISIBLE
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    fun createInfo(bookInfo: Book) {
         findViewById<TextView>(R.id.id_title).text = "Title: " + bookInfo.title
         findViewById<TextView>(R.id.id_subtitle).text = "Subtitle: " + bookInfo.subtitle
         findViewById<TextView>(R.id.id_description).text = "Description: " + bookInfo.desc
@@ -24,11 +43,10 @@ class BookInfo : AppCompatActivity() {
         if(bookInfo.image == ""){
             findViewById<ImageView>(R.id.id_image).setImageResource(R.drawable.no_image)
         } else {
-            val ims: InputStream = this.assets.open(bookInfo.image.decapitalize())
-            val d = Drawable.createFromStream(ims, null)
-            findViewById<ImageView>(R.id.id_image).setImageDrawable(d)
+            val imageUri = bookInfo.image.decapitalize()
+            val ivBasicImage = findViewById<View>(R.id.id_image) as ImageView
+            Picasso.get().load(imageUri).into(ivBasicImage)
         }
-
-        //findViewById<TextView>(R.id.id_image)
     }
 }
+

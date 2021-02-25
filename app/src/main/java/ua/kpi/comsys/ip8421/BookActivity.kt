@@ -3,14 +3,20 @@ package ua.kpi.comsys.ip8421
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class BookActivity : Fragment() {
 
@@ -24,8 +30,6 @@ class BookActivity : Fragment() {
         val arrBook = mutableListOf<Book>()
         recyclerViewAdapter = BookAdapter(context!!, arrBook)
 
-        context?.let { addBooks(view, it, recyclerViewAdapter!!) }
-
         val search = view.findViewById<SearchView>(R.id.id_search)
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -33,7 +37,15 @@ class BookActivity : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                recyclerViewAdapter!!.filter.filter(newText)
+                if (newText != null) {
+                    if (newText.length >= 3) {
+                        view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
+                        addBooks(view, recyclerViewAdapter!!, newText)
+                        recyclerViewAdapter!!.filter.filter(newText)
+                    } else {
+                        recyclerViewAdapter!!.filter.filter("********")
+                    }
+                }
                 return newText != null
             }
 
@@ -81,13 +93,24 @@ class BookActivity : Fragment() {
     }
 }
 
-fun addBooks(view: View, ctx: Context, recyclerViewAdapter : BookAdapter){
+fun addBooks(view: View, recyclerViewAdapter : BookAdapter, REQUEST : String){
     val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
     recyclerView.adapter = recyclerViewAdapter
-    val books : MutableList<Book> = readBooks(ctx, "BooksList.txt")
+
+    GlobalScope.launch {
+        val books = readBooks(REQUEST)
+        Log.d("books", books.toString())
+        withContext(Dispatchers.Main){
+            updateList(recyclerViewAdapter, recyclerView, books)
+            view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.INVISIBLE
+        }
+    }
+
+}
+
+fun updateList(recyclerViewAdapter: BookAdapter, recyclerView: RecyclerView, books: MutableList<Book>) {
     recyclerViewAdapter.actualDataSource = books
     recyclerViewAdapter.dataSource = books
     recyclerViewAdapter.notifyDataSetChanged()
     recyclerView.setOnClickListener {}
 }
-

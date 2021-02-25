@@ -11,6 +11,7 @@ import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import java.io.InputStream
 import java.util.*
 
@@ -56,9 +57,14 @@ class BookAdapter(private val context: Context, var dataSource: MutableList<Book
         if(book.image == ""){
             holder.bookImg.setImageResource(R.drawable.no_image)
         } else {
-            val ims: InputStream = context.assets.open(book.image.decapitalize())
-            val d = Drawable.createFromStream(ims, null)
-            holder.bookImg.setImageDrawable(d)
+
+//            val ims: InputStream = context.assets.open(book.image.decapitalize())
+//            val d = Drawable.createFromStream(ims, null)
+//            holder.bookImg.setImageDrawable(d)
+
+            val imageUri = book.image.decapitalize()
+            val ivBasicImage = holder.bookImg
+            Picasso.get().load(imageUri).into(ivBasicImage)
         }
     }
 

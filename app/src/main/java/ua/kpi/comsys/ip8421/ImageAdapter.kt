@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.GridLayout
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 
 class ImageAdapter(private val context: Context, var dataSource: MutableList<Uri>) : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>(){
 
@@ -27,7 +28,11 @@ class ImageAdapter(private val context: Context, var dataSource: MutableList<Uri
         param.columnSpec = GridLayout.spec(0, 2, null, 1F);
 
         holder.imageView.layoutParams = param
-        holder.imageView.setImageURI(dataSource[position])
+
+        val imageUri = dataSource[position]
+        val ivBasicImage = holder.imageView
+        Picasso.get().load(imageUri).into(ivBasicImage)
+
     }
 
     override fun getItemCount(): Int {
